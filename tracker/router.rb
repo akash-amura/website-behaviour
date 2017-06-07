@@ -1,7 +1,10 @@
 require File.expand_path("tracker/operations")
+
 module Tracker
   class Router
-    def initialize()
+
+    def initialize(app = nil)
+      @app = app
     end
 
     def call(env)
@@ -12,6 +15,8 @@ module Tracker
         end
       end
       return Operations.new { default }.call(env)
+      # In order to implement as a middleware
+      # @app.call(env) 
     end
 
     def self.routes
@@ -20,5 +25,6 @@ module Tracker
         Regexp.new(/^\/track$/) => Operations.new { save_lead_tracking_info }
       }
     end
+
   end
 end
