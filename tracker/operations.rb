@@ -1,5 +1,6 @@
 require 'pry'
 require 'json'
+require File.expand_path('tracker/event_store')
 
 module Tracker
   class Operations
@@ -10,6 +11,7 @@ module Tracker
       @block = block
       @status = 200
       @headers = {"Content-Type" => "application/json"}
+      @event_store = EventStore.new
     end
 
     def call(env)
@@ -19,16 +21,16 @@ module Tracker
       [status, headers, [body]]
     end
 
-    def send_tracker_js
-      JSON.generate({info: "Sending tracking info...."})
-    end
-
-    def get_lead_tracking_info
-      JSON.generate({info: "Getting lead info....."})
-    end
-
     def save_lead_tracking_info
-      JSON.generate({info: "Saving lead tracking info....."})
+      data = @request.body.read
+      received_data = JSON.parse(data) if data && data.length >= 2
+      event = @event_store.insert(received_data)
+      if event.key.id 
+        JSON.generate({message: "event successfully saved with id #{event.key.id}"})
+      else
+        @status = 406
+        JSON.generate({message: "event save unsuccessful"})
+      end
     end
 
     def default
