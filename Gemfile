@@ -1,3 +1,8 @@
 source "https://rubygems.org"
 gem 'rack'
-gem 'pry'
+gem 'google-cloud'
+
+group :development, :test do
+  gem 'pry'
+  gem 'byebug'
+end
