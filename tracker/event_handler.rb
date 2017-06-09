@@ -1,14 +1,13 @@
-require File.expand_path("tracker/event")
+require File.expand_path('tracker/event')
 
 module Tracker
   class EventHandler
-
     attr_reader :status, :headers, :body
 
     def initialize(&block)
       @block = block
       @status = 200
-      @headers = {"Content-Type" => "application/json"}
+      @headers = { 'Content-Type' => 'application/json' }
     end
 
     def call(env)
@@ -24,19 +23,18 @@ module Tracker
       event = Event.new(received_data)
       event.store
       event.notify
-      if event.id 
-        JSON.generate({message: "event successfully saved with id #{event.id}"})
+      if event.id
+        JSON.generate(message: "event successfully saved with id #{event.id}")
       else
         @status = 500
-        JSON.generate({message: "event save unsuccessful"})
+        JSON.generate(message: 'event save unsuccessful')
       end
     end
 
     def test
       data = @request.body.read
       received_data = JSON.parse(data) if data && data.length >= 2
-      JSON.generate({message: "#{received_data.inspect}"})
+      JSON.generate(message: received_data.inspect.to_s)
     end
-
   end
 end

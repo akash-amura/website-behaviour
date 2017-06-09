@@ -1,8 +1,9 @@
-source "https://rubygems.org"
-gem 'rack'
+source 'https://rubygems.org'
+
 gem 'google-cloud'
+gem 'rack'
 
 group :development, :test do
-  gem 'pry'
   gem 'byebug'
+  gem 'pry'
 end

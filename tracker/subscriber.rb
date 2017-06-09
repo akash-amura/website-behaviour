@@ -1,9 +1,8 @@
-require File.expand_path("tracker/datastore")
+require File.expand_path('tracker/datastore')
 
 module Tracker
   class Subscriber
-
-    attr_reader :id 
+    attr_reader :id
 
     def initialize(subscriber_hash)
       @hash = pre_process(subscriber_hash)
@@ -11,7 +10,7 @@ module Tracker
     end
 
     def store
-      datastore = Datastore.new("Subscriber") 
+      datastore = Datastore.new('Subscriber')
       @id = datastore.insert(@hash).key.id
     end
 
@@ -20,6 +19,5 @@ module Tracker
     def pre_process(hash)
       hash
     end
-
   end
 end

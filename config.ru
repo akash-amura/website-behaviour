@@ -1,2 +1,2 @@
-require File.expand_path("tracker/application")
+require File.expand_path('tracker/application')
 run ::Tracker.application
