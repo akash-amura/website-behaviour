@@ -1,9 +1,7 @@
-require 'pry'
-require 'json'
-require File.expand_path('tracker/event_store')
+require File.expand_path("tracker/event")
 
 module Tracker
-  class Operations
+  class EventHandler
 
     attr_reader :status, :headers, :body
 
@@ -11,7 +9,6 @@ module Tracker
       @block = block
       @status = 200
       @headers = {"Content-Type" => "application/json"}
-      @event_store = EventStore.new
     end
 
     def call(env)
@@ -21,21 +18,25 @@ module Tracker
       [status, headers, [body]]
     end
 
-    def save_lead_tracking_info
+    def save_event
       data = @request.body.read
       received_data = JSON.parse(data) if data && data.length >= 2
-      event = @event_store.insert(received_data)
-      if event.key.id 
-        JSON.generate({message: "event successfully saved with id #{event.key.id}"})
+      event = Event.new(received_data)
+      event.store
+      event.notify
+      if event.id 
+        JSON.generate({message: "event successfully saved with id #{event.id}"})
       else
-        @status = 406
+        @status = 500
         JSON.generate({message: "event save unsuccessful"})
       end
     end
 
-    def default
-      @status = 404
-      JSON.generate({info: "Page not found"})
+    def test
+      data = @request.body.read
+      received_data = JSON.parse(data) if data && data.length >= 2
+      JSON.generate({message: "#{received_data.inspect}"})
     end
+
   end
 end

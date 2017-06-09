@@ -1,4 +1,5 @@
-require File.expand_path("tracker/operations")
+require File.expand_path("tracker/subscriber_handler")
+require File.expand_path("tracker/event_handler")
 
 module Tracker
   class Router
@@ -14,15 +15,16 @@ module Tracker
           return operation.call(env)
         end
       end
-      return Operations.new { default }.call(env)
+      return [404, {"Content-Type" => "application/json"},[JSON.generate({"message" => "Page not found"})]]
       # In order to implement as a middleware
       # @app.call(env) 
     end
 
     def self.routes
       {
-        Regexp.new(/^\/track\/\d+\/info$/) => Operations.new { get_lead_tracking_info },
-        Regexp.new(/^\/track$/) => Operations.new { save_lead_tracking_info }
+        Regexp.new(/^\/events$/) => EventHandler.new { save_event },
+        Regexp.new(/^\/subscribers$/) => SubscriberHandler.new{ save_subscriber },
+        Regexp.new(/^\/test$/) => EventHandler.new{ test }
       }
     end
 
