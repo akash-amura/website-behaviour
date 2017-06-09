@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 require File.expand_path('tracker/subscriber')
-require 'pry'
 
 module Tracker
   class SubscriberHandler

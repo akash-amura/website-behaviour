@@ -21,9 +21,9 @@ module Tracker
 
     def self.routes
       {
-        %r{/^\/events$/} => EventHandler.new { save_event },
-        %r{/^\/subscribers$/} => SubscriberHandler.new { save_subscriber },
-        %r{/^\/test$/} => EventHandler.new { test }
+        %r{^\/events$} => EventHandler.new { save_event },
+        %r{^\/subscribers$} => SubscriberHandler.new { save_subscriber },
+        %r{^\/test$} => EventHandler.new { test }
       }
     end
   end
