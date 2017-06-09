@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require File.expand_path('tracker/router')
 
 module Tracker

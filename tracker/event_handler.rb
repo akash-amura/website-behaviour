@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require File.expand_path('tracker/event')
 
 module Tracker
@@ -13,7 +15,7 @@ module Tracker
     def call(env)
       @env = env
       @request = Rack::Request.new(env)
-      @body = self.instance_eval(&@block)
+      @body = instance_eval(&@block)
       [status, headers, [body]]
     end
 

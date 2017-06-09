@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require File.expand_path('tracker/subscriber_handler')
 require File.expand_path('tracker/event_handler')
 
