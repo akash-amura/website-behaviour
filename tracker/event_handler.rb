@@ -24,7 +24,9 @@ module Tracker
       received_data = JSON.parse(data) if data && data.length >= 2
       event = Event.new(received_data)
       event.store
-      event.notify
+      Thread.new do
+        event.notify
+      end
       if event.id
         JSON.generate(message: "event successfully saved with id #{event.id}")
       else
