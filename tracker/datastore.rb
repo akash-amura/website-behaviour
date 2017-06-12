@@ -4,11 +4,13 @@ require 'google/cloud/datastore'
 
 module Tracker
   class Datastore
-    attr_reader :store
+    attr_reader :store, :kind
 
     def initialize(kind)
+      raise 'Google cloud project is not defined in environment variable' unless ENV['GOOGLE_CLOUD_PROJECT']
       @store = Google::Cloud::Datastore.new project: ENV['GOOGLE_CLOUD_PROJECT']
       @kind = kind
+      test_connection
     end
 
     def insert(hash)
@@ -31,6 +33,12 @@ module Tracker
       raise ArgumentError, 'query method expects a block' unless block_given?
       query = yield(store.query(@kind))
       store.run query
+    end
+
+    private
+
+    def test_connection
+      @store.run @store.query(@kind).limit(1)
     end
   end
 end
